@@ -10,6 +10,7 @@ use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
@@ -41,11 +42,14 @@ class RegistrationController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             // encode the plain password
+            $user->setRoles(array('ROLE_CUSTOMER'));
             $user->setPassword(
                 $passwordEncoder->encodePassword(
                     $user,
                     $form->get('plainPassword')->getData()
+
                 )
+
             );
 
             $entityManager = $this->getDoctrine()->getManager();
@@ -62,12 +66,10 @@ class RegistrationController extends AbstractController
             );
             // do anything else you need here, like send an email
 
-            return $guardHandler->authenticateUserAndHandleSuccess(
-                $user,
-                $request,
-                $authenticator,
+            return $guardHandler->authenticateUserAndHandleSuccess($user, $request, $authenticator,
                 'main' // firewall name in security.yaml
-            );
+            )
+            ?: new RedirectResponse('/');
         }
 
         return $this->render('registration/register.html.twig', [
