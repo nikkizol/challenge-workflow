@@ -49,6 +49,11 @@ class Ticket
      */
     private $comments;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $customer_order;
+
     public function __construct()
     {
         $this->comments = new ArrayCollection();
@@ -145,6 +150,18 @@ class Ticket
                 $comment->setTicketComment(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getCustomerOrder(): ?string
+    {
+        return $this->customer_order;
+    }
+
+    public function setCustomerOrder(string $customer_order): self
+    {
+        $this->customer_order = $customer_order;
 
         return $this;
     }

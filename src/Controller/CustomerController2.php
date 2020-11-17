@@ -28,6 +28,7 @@ class CustomerController2 extends AbstractController
         $tickets = $repository->findBy(
             ['createdBy' => $userID]
         );
+        var_dump($tickets);
         return $this->render('ticket/index.html.twig', [
             'tickets' => $tickets,
             'name' => $this->getUser()->getFirstName()
