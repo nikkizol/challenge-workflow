@@ -12,7 +12,7 @@
                 <th>Datetime</th>
                 <th>Status</th>
                 <th>Priority</th>
-                <th>actions</th>
+                <th>Order</th>
             </tr>
         </thead>
         <tbody>
@@ -22,7 +22,7 @@
                 <td>{{ ticket.datetime ? ticket.datetime|date('Y-m-d H:i:s') : '' }}</td>
                 <td>{{ ticket.status }}</td>
                 <td>{{ ticket.priority }}</td>
-                <td>{{ ticket.customer.order }}</td>
+                <td>{{ ticket.customerOrder }}</td>
                 <td>
                     <a href="{{ path('ticket_show', {'id': ticket.id}) }}">show</a>
                     <a href="{{ path('ticket_edit', {'id': ticket.id}) }}">edit</a>
