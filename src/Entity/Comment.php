@@ -37,6 +37,11 @@ class Comment
      */
     private $ticketComment;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $order_comment;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -86,6 +91,18 @@ class Comment
     public function setTicketComment(?Ticket $ticketComment): self
     {
         $this->ticketComment = $ticketComment;
+
+        return $this;
+    }
+
+    public function getOrderComment(): ?string
+    {
+        return $this->order_comment;
+    }
+
+    public function setOrderComment(string $order_comment): self
+    {
+        $this->order_comment = $order_comment;
 
         return $this;
     }

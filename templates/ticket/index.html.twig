@@ -26,7 +26,7 @@
                 <td>
                     <a href="{{ path('ticket_show', {'id': ticket.id}) }}">show</a>|
                     <a href="{{ path('ticket_edit', {'id': ticket.id}) }}">edit</a>|
-                    <a href="{{ path('ticket_edit', {'id': ticket.id}) }}">leave a comment</a>
+                    <a href="{{ path('comment_index', {'id': ticket.id}) }}">leave a comment</a>
                 </td>
             </tr>
         {% else %}
