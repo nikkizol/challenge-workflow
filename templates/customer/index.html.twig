@@ -17,7 +17,7 @@
     </style>
 
     <div class="example-wrapper">
-        {% block title %}Hello Customer!{% endblock %} <br>
+        {% block title %}Hello {{ name }}!{% endblock %} <br>
 
         {% for ticket in tickets %}
             <tr>
