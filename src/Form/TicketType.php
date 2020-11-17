@@ -14,9 +14,9 @@ class TicketType extends AbstractType
         $builder
             ->add('datetime')
             ->add('status')
-            ->add('priority')
-            ->add('createdBy')
-            ->add('handledBy');
+            ->add('priority');
+/*            ->add('createdBy')
+            ->add('handledBy');*/
     }
 
     public function configureOptions(OptionsResolver $resolver)

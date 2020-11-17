@@ -11,33 +11,46 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/ticket")
+ * @Route("/customer")
  */
-class TicketController extends AbstractController
+class CustomerController2 extends AbstractController
 {
     /**
      * @Route("/", name="ticket_index", methods={"GET"})
      */
-    public function index(TicketRepository $ticketRepository): Response
+    public function index(): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_CUSTOMER');
+        $userID = $this->getUser();
+
+
+
+        $repository = $this->getDoctrine()->getRepository(Ticket::class);
+        $tickets = $repository->findBy(
+            ['createdBy' => $userID]
+        );
         return $this->render('ticket/index.html.twig', [
-            'tickets' => $ticketRepository->findAll(),
+            'tickets' => $tickets,
+            'name' => $this->getUser()->getFirstName()
         ]);
     }
 
     /**
-     * @Route("/new", name="ticket_new", methods={"GET","POST"})
+     * @Route("/new-ticket", name="ticket_new", methods={"GET","POST"})
      */
     public function new(Request $request): Response
     {
         $ticket = new Ticket();
         $form = $this->createForm(TicketType::class, $ticket);
         $form->handleRequest($request);
+        $userID = $this->getUser()->getId();
+        var_dump($this->getUser());
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($ticket);
             $entityManager->flush();
+            $ticket->setCreatedBy($userID);
 
             return $this->redirectToRoute('ticket_index');
         }
