@@ -14,6 +14,7 @@ class CustomerController extends AbstractController
      */
     public function index(): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_CUSTOMER');
         $repository = $this->getDoctrine()->getRepository(Ticket::class);
         $tickets = $repository->findBy(
             ['id' => 'ASC']
