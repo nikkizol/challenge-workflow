@@ -12,11 +12,8 @@ class TicketType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('datetime')
-            ->add('status')
             ->add('priority');
-/*            ->add('createdBy')
-            ->add('handledBy');*/
+
     }
 
     public function configureOptions(OptionsResolver $resolver)

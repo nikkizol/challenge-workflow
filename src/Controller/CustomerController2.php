@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Ticket;
 use App\Form\TicketType;
 use App\Repository\TicketRepository;
+use DateTime;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,8 +23,6 @@ class CustomerController2 extends AbstractController
     {
         $this->denyAccessUnlessGranted('ROLE_CUSTOMER');
         $userID = $this->getUser();
-
-
 
         $repository = $this->getDoctrine()->getRepository(Ticket::class);
         $tickets = $repository->findBy(
@@ -43,14 +42,18 @@ class CustomerController2 extends AbstractController
         $ticket = new Ticket();
         $form = $this->createForm(TicketType::class, $ticket);
         $form->handleRequest($request);
-        $userID = $this->getUser()->getId();
-        var_dump($this->getUser());
+        $userID = $this->getUser();
+
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
+            $ticket->setCreatedBy($userID);
+            $ticket->setDatetime(new DateTime());
+            $ticket->setStatus('OPEN');
+            $ticket->setPriority(0);
+
             $entityManager->persist($ticket);
             $entityManager->flush();
-            $ticket->setCreatedBy($userID);
 
             return $this->redirectToRoute('ticket_index');
         }
