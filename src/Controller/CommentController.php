@@ -21,9 +21,10 @@ class CommentController extends AbstractController
      */
     public function index(CommentRepository $commentRepository): Response
     {
-        $userID = $this->getUser();
+/*        $userID = $this->getUser();*/
+        $ticket = $_GET["id"];
         $comments = $commentRepository->findBy(
-            ['createdBy' => $userID]
+            ['ticketComment' => $ticket]
         );
         return $this->render('comment/index.html.twig', [
             'comments' => $comments,
