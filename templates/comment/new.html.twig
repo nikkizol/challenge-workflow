@@ -8,6 +8,6 @@
 
         {{ include('comment/_form.html.twig') }}
 
-        <a class="btn btn-outline-primary mt-2" href="{{ path('comment_index') }}">back to list</a>
+        <a class="btn btn-outline-primary mt-2" href="{{ path('comment_index', {'id': ticketId}) }}">back to list</a>
     </div>
 {% endblock %}

@@ -3,8 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\Comment;
+use App\Entity\Ticket;
 use App\Form\CommentType;
 use App\Repository\CommentRepository;
+use App\Repository\TicketRepository;
 use DateTime;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,45 +19,50 @@ use Symfony\Component\Routing\Annotation\Route;
 class CommentController extends AbstractController
 {
     /**
-     * @Route("/", name="comment_index", methods={"GET"})
+     * @Route("/ticket/{id}", name="comment_index", methods={"GET"})
      */
-    public function index(CommentRepository $commentRepository): Response
+    public function index(CommentRepository $commentRepository, Ticket $ticket): Response
     {
-/*        $userID = $this->getUser();*/
-        $ticket = $_GET["id"];
+        $ticketId = $ticket->getId();
+        var_dump($ticketId);
         $comments = $commentRepository->findBy(
-            ['ticketComment' => $ticket]
+            ['ticketComment' => $ticketId]
         );
+
         return $this->render('comment/index.html.twig', [
             'comments' => $comments,
-            'name' => $this->getUser()->getFirstName()
+            'name' => $this->getUser()->getFirstName(),
+            'ticketId' => $ticketId,
         ]);
     }
 
+
     /**
-     * @Route("/new", name="comment_new", methods={"GET","POST"})
+     * @Route("/new/ticket/{id}", name="comment_new", methods={"GET","POST"})
      */
-    public function new(Request $request): Response
+    public function new(Request $request, Ticket $ticket): Response
     {
+        $ticketId = $ticket->getId();
         $comment = new Comment();
         $form = $this->createForm(CommentType::class, $comment);
         $form->handleRequest($request);
         $userID = $this->getUser();
-
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
             $comment->setCreatedBy($userID);
+            $comment->setTicketComment($ticket);
             $comment->setPublic(true);
             $comment->setDatetime(new DateTime());
             $entityManager->persist($comment);
             $entityManager->flush();
 
-            return $this->redirectToRoute('comment_index');
+            return $this->redirectToRoute('comment_index', ['id' => $ticketId]);
         }
 
         return $this->render('comment/new.html.twig', [
             'comment' => $comment,
             'form' => $form->createView(),
+            'ticketId' => $ticketId,
         ]);
     }
 

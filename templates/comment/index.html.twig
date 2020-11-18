@@ -28,7 +28,7 @@
 
                     <td>
                         <a class="btn btn-outline-info mr-2" href="{{ path('comment_show', {'id': comment.id}) }}">show</a>
-                        <a class="btn btn-outline-primary"href="{{ path('comment_edit', {'id': comment.id}) }}">edit</a>
+                        <a class="btn btn-outline-primary" href="{{ path('comment_edit', {'id': comment.id}) }}">edit</a>
                     </td>
                 </tr>
             {% else %}
@@ -38,7 +38,6 @@
             {% endfor %}
             </tbody>
         </table>
-
-        <a class="btn btn-primary" href="{{ path('comment_new') }}">Create new</a>
+        <a class="btn btn-primary" href="{{ path('comment_new', {'id': ticketId}) }}">Create new</a>
     </div>
 {% endblock %}
