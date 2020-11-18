@@ -21,7 +21,7 @@ class SecurityController extends AbstractController
                  return $this->redirectToRoute('ticket_index');
              }
              elseif ($this->getUser()->getRoles()[0] == "ROLE_AGENT") {
-                 return $this->redirectToRoute('app_register');
+                 return $this->redirectToRoute('agent');
              }
          }
         // get the login error if there is one
