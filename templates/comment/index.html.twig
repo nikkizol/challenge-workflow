@@ -3,39 +3,42 @@
 {% block title %}Comment index{% endblock %}
 
 {% block body %}
-    <h1>Comment index</h1>
+    <div class="container">
+        <h1>Comment index</h1>
 
-    <table class="table">
-        <thead>
+        <table class="table table-striped table-hover">
+            <thead class="thead-dark">
             <tr>
                 <th>Name</th>
                 <th>Datetime</th>
                 <th>Comments</th>
+                <th>Action</th>
             </tr>
-        </thead>
-        <tbody>
-        {% for comment in comments %}
-            <tr>
-                <td>{{ name }}</td>
-                <td>{{ comment.datetime ? comment.datetime|date('Y-m-d H:i:s') : '' }}</td>
-{#
-                <td>{{ comment.public ? 'Yes' : 'No' }}</td>
-#}
-                <td>{{ comment.orderComment }}</td>
+            </thead>
+            <tbody>
+            {% for comment in comments %}
+                <tr>
+                    <td>{{ name }}</td>
+                    <td>{{ comment.datetime ? comment.datetime|date('Y-m-d H:i:s') : '' }}</td>
+                    {#
+                    <td>{{ comment.public ? 'Yes' : 'No' }}</td>
+                    #}
+                    <td>{{ comment.orderComment }}</td>
 
 
-                <td>
-                    <a href="{{ path('comment_show', {'id': comment.id}) }}">show</a>
-                    <a href="{{ path('comment_edit', {'id': comment.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="4">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+                    <td>
+                        <a class="btn btn-outline-info mr-2" href="{{ path('comment_show', {'id': comment.id}) }}">show</a>
+                        <a class="btn btn-outline-primary"href="{{ path('comment_edit', {'id': comment.id}) }}">edit</a>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="4">no records found</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
 
-    <a href="{{ path('comment_new') }}">Create new</a>
+        <a class="btn btn-primary" href="{{ path('comment_new') }}">Create new</a>
+    </div>
 {% endblock %}
