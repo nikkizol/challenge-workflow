@@ -27,7 +27,7 @@
                     <td>{{ ticket.customerOrder }}</td>
                     <td>
                         <a class="btn btn-outline-info" href="{{ path('ticket_show', {'id': ticket.id}) }}"> Show</a>
-                        <a class="btn btn-outline-primary" href="{{ path('ticket_edit', {'id': ticket.id}) }}"> Edit</a>
+{#                        <a class="btn btn-outline-primary" href="{{ path('ticket_edit', {'id': ticket.id}) }}"> Edit</a>#}
                         <a class="btn btn-outline-secondary" href="{{ path('comment_index', {'id': ticket.id}) }}">Display comments</a>
                         <a class="btn btn-outline-secondary" href="{{ path('ticket_reopen', {'id': ticket.id}) }}">REOPEN TICKET</a>
                     </td>

@@ -12,7 +12,7 @@
                 <th>Name</th>
                 <th>Datetime</th>
                 <th>Comments</th>
-                <th>Action</th>
+{#                <th>Action</th>#}
             </tr>
             </thead>
             <tbody>
@@ -24,10 +24,10 @@
                     <td>{{ comment.public ? 'Yes' : 'No' }}</td>
                     #}
                     <td>{{ comment.orderComment }}</td>
-                    <td>
-                        <a class="btn btn-outline-info mr-2" href="{{ path('comment_show', {'id': comment.id}) }}">show</a>
-                        <a class="btn btn-outline-primary" href="{{ path('comment_edit', {'id': comment.id}) }}">edit</a>
-                    </td>
+{#                    <td>#}
+{#                        <a class="btn btn-outline-info mr-2" href="{{ path('comment_show', {'id': comment.id}) }}">show</a>#}
+{#                        <a class="btn btn-outline-primary" href="{{ path('comment_edit', {'id': comment.id}) }}">edit</a>#}
+{#                    </td>#}
                 </tr>
             {% else %}
                 <tr>
