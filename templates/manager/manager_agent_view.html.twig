@@ -3,7 +3,8 @@
 {% block title %}Ticket index{% endblock %}
 
 {% block body %}
-    <h1>Agent tickets</h1>
+<div class="container">
+<h1>Agent tickets</h1>
     <table class="table">
         <thead>
         <tr>
@@ -24,7 +25,7 @@
                 <td>{{ ticket.customerOrder }}</td>
                 <td>
                     <a href="{{ path('ticketAgent_show', {'id': ticket.id}) }}">show</a>|
-                    <a href="{{ path('ticketAgent_edit', {'id': ticket.id}) }}">edit</a>|
+                    <a href="{{ path('edit_ticket', {'id': ticket.id}) }}">edit</a>|
                     <a href="{{ path('comment_index', {'id': ticket.id}) }}">leave a comment</a>
                 </td>
             </tr>
@@ -35,5 +36,6 @@
         {% endfor %}
         </tbody>
     </table>
-
+    <a class="btn btn-outline-info" href="{{ path('manager') }}">Dashboard</a>
+</div>
 {% endblock %}

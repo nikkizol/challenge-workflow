@@ -2,9 +2,12 @@
 
 namespace App\Controller;
 
+use App\Entity\Comment;
 use App\Entity\Ticket;
+use App\Form\ManagerTicketType;
 use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -35,7 +38,6 @@ class ManagerController extends AbstractController
     {
         $agent = $userRepository->findByRole("ROLE_AGENT");
 
-
         $userID = $_GET["id"];
 
         $userRepository = $this->getDoctrine()->getRepository(Ticket::class);
@@ -52,4 +54,25 @@ class ManagerController extends AbstractController
         ]);
     }
 
+    /**
+     * @Route("/edit-ticket/{id}", name="edit_ticket", methods={"GET","POST"})
+     */
+    public function editTicket(Request $request, Ticket $ticket): Response
+    {
+/*        $ticketId = $ticket->getId();
+        $ticket->setStatus();*/
+        $form = $this->createForm(ManagerTicketType::class);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->getDoctrine()->getManager()->flush();
+
+            return $this->redirectToRoute('manager');
+        }
+
+        return $this->render('manager/manager_ticket_edit.html.twig', [
+            'ticket' => $ticket,
+            'form' => $form->createView(),
+        ]);
+    }
 }
