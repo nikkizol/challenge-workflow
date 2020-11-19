@@ -34,7 +34,7 @@ class AgentController extends AbstractController
             ['status' => "OPEN", "handledBy" => null]
         );
         $myTickets = $repository->findBy(
-            ["handledBy" => $userID, 'status' => "IN PROGRESS",'status' => "WAITING FOR CUSTOMER FEEDBACK" ]
+            ["handledBy" => $userID]
         );
 
         $closeTickets = $repository->findBy(
