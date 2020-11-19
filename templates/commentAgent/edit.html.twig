@@ -9,7 +9,7 @@
         {{ include('comment/_form.html.twig', {'button_label': 'Update'}) }}
 
         <div class="d-flex mt-2">
-            <a class="btn btn-outline-primary mr-2" href="{{ path('comment_index',{'id': comment.getTicketComment.id}) }}">back to list</a>
+            <a class="btn btn-outline-primary mr-2" href="{{ path('commentAgent_index',{'id': comment.getTicketComment.id}) }}">back to list</a>
 
             {{ include('comment/_delete_form.html.twig') }}
         </div>
