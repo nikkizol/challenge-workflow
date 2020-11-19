@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Comment{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <h1>Create new Comment</h1>
+
+        {{ include('comment/_form.html.twig') }}
+
+        <a class="btn btn-outline-primary mt-2" href="{{ path('commentAgent_index', {'id': ticketId}) }}">back to list</a>
+    </div>
+{% endblock %}

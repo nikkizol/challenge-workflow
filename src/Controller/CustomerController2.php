@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Ticket;
 use App\Form\TicketType;
+use App\Repository\CommentRepository;
 use App\Repository\TicketRepository;
 use DateTime;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -99,7 +100,7 @@ class CustomerController2 extends AbstractController
      */
     public function delete(Request $request, Ticket $ticket): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$ticket->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $ticket->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($ticket);
             $entityManager->flush();
@@ -107,4 +108,31 @@ class CustomerController2 extends AbstractController
 
         return $this->redirectToRoute('ticket_index');
     }
+
+
+    /**
+     * @Route("/{id}/reopen", name="ticket_reopen", methods={"GET","POST"})
+     */
+    public function reopenTicket(Request $request, Ticket $ticket, TicketRepository $ticketRepository, CommentRepository $commentRepository): Response
+    {
+
+        $timeString = $ticket->getDatetime();
+//        var_dump($timeString);
+        $inTime = new DateTime();
+//        var_dump($inTime);
+        $interval = date_diff($timeString, $inTime);
+        $diff = $interval->format("%H:%I:%S");
+//        var_dump($diff);
+
+        if ($diff < '01:00:00' && $ticket->getStatus() == 'CLOSED' ){
+            $ticket->setStatus('OPEN');
+            $ticket->setDatetime(new DateTime());
+            $ticket->setHandledBy(null);
+            $this->getDoctrine()->getManager()->flush();
+                return $this->redirectToRoute('ticket_index');
+        }
+        return $this->redirectToRoute('ticket_index');
+        }
+
+
 }

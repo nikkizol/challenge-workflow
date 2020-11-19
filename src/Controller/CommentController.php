@@ -4,14 +4,18 @@ namespace App\Controller;
 
 use App\Entity\Comment;
 use App\Entity\Ticket;
+use App\Entity\User;
 use App\Form\CommentType;
 use App\Repository\CommentRepository;
 use App\Repository\TicketRepository;
+use App\Repository\UserRepository;
 use DateTime;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
 
 /**
  * @Route("/comment")
@@ -26,21 +30,21 @@ class CommentController extends AbstractController
         $ticketId = $ticket->getId();
         var_dump($ticketId);
         $comments = $commentRepository->findBy(
-            ['ticketComment' => $ticketId]
+            ['ticketComment' => $ticketId, 'public' => 1]
         );
 
         return $this->render('comment/index.html.twig', [
             'comments' => $comments,
-            'name' => $this->getUser()->getFirstName(),
             'ticketId' => $ticketId,
         ]);
     }
 
 
+
     /**
      * @Route("/new/ticket/{id}", name="comment_new", methods={"GET","POST"})
      */
-    public function new(Request $request, Ticket $ticket): Response
+    public function new(Request $request, Ticket $ticket, MailerInterface $mailer): Response
     {
         $ticketId = $ticket->getId();
         $comment = new Comment();
@@ -53,6 +57,19 @@ class CommentController extends AbstractController
             $comment->setTicketComment($ticket);
             $comment->setPublic(true);
             $comment->setDatetime(new DateTime());
+//            if ($userID->getRoles()[0] == "ROLE_AGENT") {
+//                $ticket->setStatus("WAITING FOR CUSTOMER FEEDBACK");
+//            }
+            if ($ticket->getStatus() == "WAITING FOR CUSTOMER FEEDBACK") {
+                $ticket->setStatus("IN PROGRESS");
+                $email = (new Email())
+                    ->from('ticketDesk@example.com')
+                    ->to($ticket->getHandledBy()->getUsername())
+                    ->subject('Customer Replied!')
+                    ->text('Customer Replied!')
+                    ->html('<p>Customer Replied!</p>');
+                $mailer->send($email);
+            }
             $entityManager->persist($comment);
             $entityManager->flush();
 
@@ -71,8 +88,10 @@ class CommentController extends AbstractController
      */
     public function show(Comment $comment): Response
     {
+//        $ticketId = $ticket->getId();
         return $this->render('comment/show.html.twig', [
             'comment' => $comment,
+//            'ticketId' => $ticketId,
         ]);
     }
 
@@ -101,7 +120,7 @@ class CommentController extends AbstractController
      */
     public function delete(Request $request, Comment $comment): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$comment->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $comment->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($comment);
             $entityManager->flush();

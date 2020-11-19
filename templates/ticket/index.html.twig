@@ -4,7 +4,7 @@
 
 {% block body %}
     <div class="container">
-        <h1>Ticket index</h1>
+        <h1>Customer Tickets</h1>
 
         <table class="table table-striped table-hover">
             <thead class="thead-dark">
@@ -12,7 +12,7 @@
                 <th>Id</th>
                 <th>Datetime</th>
                 <th>Status</th>
-                <th>Priority</th>
+{#                <th>Priority</th>#}
                 <th>Order</th>
                 <th>Action</th>
             </tr>
@@ -23,13 +23,13 @@
                     <td>{{ ticket.id }}</td>
                     <td>{{ ticket.datetime ? ticket.datetime|date('Y-m-d H:i:s') : '' }}</td>
                     <td>{{ ticket.status }}</td>
-                    <td>{{ ticket.priority }}</td>
+{#                    <td>{{ ticket.priority }}</td>#}
                     <td>{{ ticket.customerOrder }}</td>
                     <td>
                         <a class="btn btn-outline-info" href="{{ path('ticket_show', {'id': ticket.id}) }}"> Show</a>
                         <a class="btn btn-outline-primary" href="{{ path('ticket_edit', {'id': ticket.id}) }}"> Edit</a>
                         <a class="btn btn-outline-secondary" href="{{ path('comment_index', {'id': ticket.id}) }}">Display comments</a>
-{#                        <a class="btn btn-outline-secondary" href="{{ path('comment_new', {'id': ticket.id}) }}">Leave a comment</a>#}
+                        <a class="btn btn-outline-secondary" href="{{ path('ticket_reopen', {'id': ticket.id}) }}">REOPEN TICKET</a>
                     </td>
                 </tr>
             {% else %}

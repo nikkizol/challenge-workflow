@@ -11,6 +11,7 @@
             <tr>
                 <th>Name</th>
                 <th>Datetime</th>
+                <th>Public</th>
                 <th>Comments</th>
                 <th>Action</th>
             </tr>
@@ -20,13 +21,11 @@
                 <tr>
                     <td>{{ comment.getCreatedBy.getFirstName }}</td>
                     <td>{{ comment.datetime ? comment.datetime|date('Y-m-d H:i:s') : '' }}</td>
-                    {#
                     <td>{{ comment.public ? 'Yes' : 'No' }}</td>
-                    #}
                     <td>{{ comment.orderComment }}</td>
                     <td>
-                        <a class="btn btn-outline-info mr-2" href="{{ path('comment_show', {'id': comment.id}) }}">show</a>
-                        <a class="btn btn-outline-primary" href="{{ path('comment_edit', {'id': comment.id}) }}">edit</a>
+                        <a class="btn btn-outline-info mr-2" href="{{ path('commentAgent_show', {'id': comment.id}) }}">show</a>
+                        <a class="btn btn-outline-primary" href="{{ path('commentAgent_edit', {'id': comment.id}) }}">edit</a>
                     </td>
                 </tr>
             {% else %}
@@ -36,7 +35,7 @@
             {% endfor %}
             </tbody>
         </table>
-        <a class="btn btn-primary" href="{{ path('comment_new', {'id': ticketId}) }}">Create new</a>
-        <a class="btn btn-primary" href="{{ path('ticket_index') }}">My Page</a>
+        <a class="btn btn-primary" href="{{ path('commentAgent_new', {'id': ticketId}) }}">Create new</a>
+        <a class="btn btn-primary" href="{{ path('agent') }}">My Page</a>
     </div>
 {% endblock %}

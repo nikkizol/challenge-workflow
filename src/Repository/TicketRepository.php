@@ -18,6 +18,14 @@ class TicketRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Ticket::class);
     }
+    public function findWithImages($id)
+    {
+        $queryBuilder = $this->createQueryBuilder('u')
+//            ->join('u.images', 'i')
+            ->where('u.id = :id')
+            ->setParameter('id', $id);
+        return $queryBuilder->getQuery()->getResult();
+    }
 
     // /**
     //  * @return Ticket[] Returns an array of Ticket objects
