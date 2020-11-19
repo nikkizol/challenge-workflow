@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ticket index{% endblock %}
+
+{% block body %}
+<div class="container">
+<h1>Agent tickets</h1>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th>Datetime</th>
+            <th>Status</th>
+            <th>Priority</th>
+            <th>Order</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for ticket in myTickets %}
+            <tr>
+                <td>{{ ticket.id }}</td>
+                <td>{{ ticket.datetime ? ticket.datetime|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ ticket.status }}</td>
+                <td>{{ ticket.priority }}</td>
+                <td>{{ ticket.customerOrder }}</td>
+                <td>
+                    <a href="{{ path('ticketAgent_show', {'id': ticket.id}) }}">show</a>|
+                    <a href="{{ path('edit_ticket', {'id': ticket.id}) }}">edit</a>|
+                    <a href="{{ path('comment_index', {'id': ticket.id}) }}">leave a comment</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <a class="btn btn-outline-info" href="{{ path('manager') }}">Dashboard</a>
+</div>
+{% endblock %}
