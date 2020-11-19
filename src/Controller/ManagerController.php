@@ -13,7 +13,7 @@ class ManagerController extends AbstractController
 {
 
     /**
-     * @Route("/", name="manager", methods={"GET"})
+     * @Route("/dashboard", name="manager", methods={"GET"})
      */
     public function index(): Response
     {
