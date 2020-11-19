@@ -1,23 +1,30 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello ManagerController!{% endblock %}
+{% block title %}Manager Dashboard{% endblock %}
 
 {% block body %}
     <a class="btn btn-outline-info" href="{{ path('user_index') }}">ALL USERS</a>
 {#
     <a class="btn btn-outline-info" href="{{ path('ticketAgent_show', {'id': user.id}) }}">Agent Tickets</a>
 #}
+    <h1>Active agents:</h1>
     <table class="table table-striped table-hover">
     <thead class="thead-dark">
     <tr>
         <th>Id</th>
         <th>Email</th>
+{#
         <th>Roles</th>
+#}
+{#
         <th>Password</th>
+#}
         <th>FirstName</th>
         <th>LastName</th>
-        <th>IsVerified</th>
+        <th>Profile</th>
+{#
         <th>actions</th>
+#}
     </tr>
     </thead>
     <tbody>
@@ -28,15 +35,19 @@
             {#
             <td>{{ agent.roles ? user.roles|json_encode : '' }}</td>
             #}
+{#
             <td>{{ user.password }}</td>
+#}
             <td>{{ user.firstName }}</td>
             <td>{{ user.lastName }}</td>
             {#
             <td>{{ agent.isVerified ? 'Yes' : 'No' }}</td>
             #}
             <td>
-                {#        <a class="btn btn-outline-info" href="{{ path('user_show', {'id': user.id}) }}">Show</a>
-                    <a class="btn btn-outline-primary" href="{{ path('user_edit', {'id': user.id}) }}">Edit</a>#}
+                <a class="btn btn-outline-info" href="{{ path('display_agent', {'id': user.id}) }}">Show</a>
+{#
+                <a class="btn btn-outline-primary" href="{{ path('user_edit', {'id': user.id}) }}">Edit</a>
+#}
             </td>
         </tr>
     {% else %}

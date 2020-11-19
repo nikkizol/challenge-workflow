@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Ticket;
 use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -28,15 +29,26 @@ class ManagerController extends AbstractController
     }
 
     /**
-     * @Route("/display-agents", name="display_agents", methods={"GET"})
+     * @Route("/display-agents", name="display_agent", methods={"GET"})
      */
-    public function showAgents(UserRepository $userRepository)
+    public function showAgent(UserRepository $userRepository): Response
     {
+        $agent = $userRepository->findByRole("ROLE_AGENT");
 
-        return $this->render('manager/display_agents.html.twig', [
-            'users' => $userRepository->findByRole(
-                "ROLE_AGENT"
-            )
+
+        $userID = $_GET["id"];
+
+        $userRepository = $this->getDoctrine()->getRepository(Ticket::class);
+        $tickets = $userRepository->findBy(
+            ['status' => "OPEN", "handledBy" => null]
+        );
+        $myTickets = $userRepository->findBy(
+            ["handledBy" => $userID]
+        );
+        return $this->render('manager/manager_agent_view.html.twig', [
+            'tickets' => $tickets,
+            'myTickets' => $myTickets
+            /*            'name' => $this->getUser()->getFirstName()*/
         ]);
     }
 
