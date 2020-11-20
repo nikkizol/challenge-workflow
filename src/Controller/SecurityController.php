@@ -23,6 +23,9 @@ class SecurityController extends AbstractController
              elseif ($this->getUser()->getRoles()[0] == "ROLE_AGENT") {
                  return $this->redirectToRoute('agent');
              }
+             elseif ($this->getUser()->getRoles()[0] == "ROLE_SECOND_AGENT") {
+                 return $this->redirectToRoute('second-agent');
+             }
              elseif ($this->getUser()->getRoles()[0] == "ROLE_MANAGER") {
                  return $this->redirectToRoute('manager');
              }

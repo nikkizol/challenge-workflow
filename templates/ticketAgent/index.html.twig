@@ -4,116 +4,122 @@
 
 {% block body %}
     <div class="container">
-        <div class="row">
-            <h1>Open Tickets</h1>
+    <div class="row">
+    <h1>Open Tickets</h1>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th>Datetime</th>
+            <th>Status</th>
+            <th>Second Line</th>
+            <th>Priority</th>
+            <th>Order</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for ticket in tickets %}
+            <tr>
+                <td>{{ ticket.id }}</td>
+                <td>{{ ticket.datetime ? ticket.datetime|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ ticket.status }}</td>
+                <td>{{ ticket.secondLine ? 'Yes' : 'No' }}</td>
+                <td>{{ ticket.priority }}</td>
+                <td>{{ ticket.customerOrder }}</td>
+                <td>
+                    <a href="{{ path('ticketAgent_show', {'id': ticket.id}) }}">Show</a>|
+                    {% if is_granted('ROLE_AGENT') %}
+                        <a href="{{ path('ticketAgent_assign', {'id': ticket.id}) }}">Assign self</a>
+                    {% elseif is_granted('ROLE_SECOND_AGENT') %}
+                        <a href="{{ path('ticketSecondAgent_assign', {'id': ticket.id}) }}">Assign self</a>
+                    {% endif %}
+                    {% if is_granted('ROLE_AGENT') %}
+                        |<a href="{{ path('ticketAgent_escalate', {'id': ticket.id}) }}">Escalate a ticket</a>
+                    {% endif %}
+                    {# <a href="{{ path('ticketAgent_escalate', {'id': ticket.id}) }}">Escalate a ticket</a> #}
+                    {# <a href="{{ path('comment_index', {'id': ticket.id}) }}">leave a comment</a> #}
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {# <a class="btn btn-primary" href="{{ path('ticket_new') }}">Create new</a> #}
+    <h1>My Tickets</h1>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th>Datetime</th>
+            <th>Status</th>
+            <th>Priority</th>
+            <th>Order</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for ticket in myTickets %}
+            <tr>
+                <td>{{ ticket.id }}</td>
+                <td>{{ ticket.datetime ? ticket.datetime|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ ticket.status }}</td>
+                <td>{{ ticket.priority }}</td>
+                <td>{{ ticket.customerOrder }}</td>
+                <td>
+                    <a href="{{ path('ticketAgent_show', {'id': ticket.id}) }}">Show</a>|
+                    {# <a href="{{ path('ticketAgent_edit', {'id': ticket.id}) }}">Edit</a>| #}
+                    <a href="{{ path('commentAgent_index', {'id': ticket.id}) }}">Display Comments</a>|
+                    {% if is_granted('ROLE_AGENT') %}
+                        <a href="{{ path('ticketAgent_close', {'id': ticket.id}) }}">Close ticket</a>
+                    {% elseif is_granted('ROLE_SECOND_AGENT') %}
+                        <a href="{{ path('ticketSecondAgent_close', {'id': ticket.id}) }}">Close ticket</a>
+                    {% endif %}
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
 
-            <table class="table table-striped table-hover">
-                <thead class="thead-dark">
-                <tr>
-                    <th>Id</th>
-                    <th>Datetime</th>
-                    <th>Status</th>
-                    <th>Priority</th>
-                    <th>Order</th>
-                    <th>Action</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for ticket in tickets %}
-                    <tr>
-                        <td>{{ ticket.id }}</td>
-                        <td>{{ ticket.datetime ? ticket.datetime|date('Y-m-d H:i:s') : '' }}</td>
-                        <td>{{ ticket.status }}</td>
-                        <td>{{ ticket.priority }}</td>
-                        <td>{{ ticket.customerOrder }}</td>
-                        <td>
-                            <a class="btn btn-outline-info" href="{{ path('ticketAgent_show', {'id': ticket.id}) }}">Show</a>|
-                            <a class="btn btn-outline-secondary" href="{{ path('ticketAgent_assign', {'id': ticket.id}) }}">Assign self</a>
-                            {# <a class="btn btn-outline-secondary" href="{{ path('comment_index', {'id': ticket.id}) }}">leave a comment</a>#}
-                        </td>
-                    </tr>
-                {% else %}
-                    <tr>
-                        <td colspan="5">no records found</td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-        </div>
+    {# <h1>Closed Tickets</h1> #}
+    {# <table class="table"> #}
+    {# <thead> #}
+    {# <tr> #}
+    {# <th>Id</th> #}
+    {# <th>Datetime</th> #}
+    {# <th>Status</th> #}
+    {# <th>Priority</th> #}
+    {# <th>Order</th> #}
+    {# <th>Action</th> #}
+    {# </tr> #}
+    {# </thead> #}
+    {# <tbody> #}
+    {# {% for ticket in closeTickets %} #}
+    {# <tr> #}
+    {# <td>{{ ticket.id }}</td> #}
+    {# <td>{{ ticket.datetime ? ticket.datetime|date('Y-m-d H:i:s') : '' }}</td> #}
+    {# <td>{{ ticket.status }}</td> #}
+    {# <td>{{ ticket.priority }}</td> #}
+    {# <td>{{ ticket.customerOrder }}</td> #}
+    {# <td> #}
+    {# <a href="{{ path('ticketAgent_show', {'id': ticket.id}) }}">show</a>| #}
+    {# <a href="{{ path('ticketAgent_edit', {'id': ticket.id}) }}">edit</a>| #}
+    {# <a href="{{ path('commentAgent_index', {'id': ticket.id}) }}">leave a comment</a> #}
+    {# </td> #}
+    {# </tr> #}
+    {# {% else %} #}
+    {# <tr> #}
+    {# <td colspan="5">no records found</td> #}
+    {# </tr> #}
+    {# {% endfor %} #}
+    {# </tbody> #}
+    {# </table> #}
 
-        {# <a class="btn btn-primary" href="{{ path('ticket_new') }}">Create new</a>#}
-
-        <div class="row">
-            <h1>My Tickets</h1>
-            <table class="table table-striped table-hover">
-                <thead class="thead-dark">
-                <tr>
-                    <th>Id</th>
-                    <th>Datetime</th>
-                    <th>Status</th>
-                    <th>Priority</th>
-                    <th>Order</th>
-                    <th>Action</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for ticket in myTickets %}
-                    <tr>
-                        <td>{{ ticket.id }}</td>
-                        <td>{{ ticket.datetime ? ticket.datetime|date('Y-m-d H:i:s') : '' }}</td>
-                        <td>{{ ticket.status }}</td>
-                        <td>{{ ticket.priority }}</td>
-                        <td>{{ ticket.customerOrder }}</td>
-                        <td>
-                            <a class="btn btn-outline-info" href="{{ path('ticketAgent_show', {'id': ticket.id}) }}">Show</a>|
-                            {#<a class="btn btn-outline-secondary" href="{{ path('ticketAgent_edit', {'id': ticket.id}) }}">Edit</a>|#}
-                            <a class="btn btn-outline-secondary" href="{{ path('commentAgent_index', {'id': ticket.id}) }}">Display Comments</a>|
-                            <a class="btn btn-outline-secondary" href="{{ path('ticketAgent_close', {'id': ticket.id})}}">Close ticket</a>
-                        </td>
-                    </tr>
-                {% else %}
-                    <tr>
-                        <td colspan="5">no records found</td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-        </div>
-
-        <div class="row">
-            <h1>Closed Tickets</h1>
-            <table class="table table-striped table-hover">
-                <thead class="thead-dark">
-                <tr>
-                    <th>Id</th>
-                    <th>Datetime</th>
-                    <th>Status</th>
-                    <th>Priority</th>
-                    <th>Order</th>
-                    <th>Action</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for ticket in closeTickets %}
-                    <tr>
-                        <td>{{ ticket.id }}</td>
-                        <td>{{ ticket.datetime ? ticket.datetime|date('Y-m-d H:i:s') : '' }}</td>
-                        <td>{{ ticket.status }}</td>
-                        <td>{{ ticket.priority }}</td>
-                        <td>{{ ticket.customerOrder }}</td>
-                        {#<td>#}
-                        {# <a class="btn btn-outline-info" href="{{ path('ticketAgent_show', {'id': ticket.id}) }}">show</a>|#}
-                        {# <a class="btn btn-outline-secondary" href="{{ path('ticketAgent_edit', {'id': ticket.id}) }}">edit</a>|#}
-                        {# <a class="btn btn-outline-secondary" href="{{ path('commentAgent_index', {'id': ticket.id}) }}">leave a comment</a>#}
-                        {#  </td>#}
-                    </tr>
-                {% else %}
-                    <tr>
-                        <td colspan="5">no records found</td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-        </div>
-    </div>
 {% endblock %}
