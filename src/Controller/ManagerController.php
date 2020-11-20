@@ -19,15 +19,20 @@ class ManagerController extends AbstractController
 
     /**
      * @Route("/dashboard", name="manager", methods={"GET"})
+     * @param UserRepository $userRepository
+     * @param Ticket $ticket
+     * @return Response
      */
-    public function index(UserRepository $userRepository): Response
+    public function index(Ticket $ticket, UserRepository $userRepository): Response
     {
         $this->denyAccessUnlessGranted('ROLE_MANAGER');
+        $agents = $userRepository->findByRole("ROLE_AGENT");
+        $ticket = $userRepository->findBy(
+            ['status' => "OPEN", "WAITING FOR CUSTOMER FEEDBACK", "IN PROGRESS"]);
 
         return $this->render('manager/index.html.twig', [
-            'users' => $userRepository->findByRole(
-                "ROLE_AGENT"
-            )
+            'users' => $agents,
+            "ticket" => $ticket
         ]);
     }
 
@@ -59,20 +64,25 @@ class ManagerController extends AbstractController
      */
     public function editTicket(Request $request, Ticket $ticket): Response
     {
-/*        $ticketId = $ticket->getId();
-        $ticket->setStatus();*/
-        $form = $this->createForm(ManagerTicketType::class);
-        $form->handleRequest($request);
+        $ticket->setStatus("won't fix");
+        
+        $this->getDoctrine()->getManager()->flush();
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
-
-            return $this->redirectToRoute('manager');
-        }
-
-        return $this->render('manager/manager_ticket_edit.html.twig', [
-            'ticket' => $ticket,
-            'form' => $form->createView(),
-        ]);
+        return $this->redirectToRoute('manager');
     }
+
+    /**
+     * @Route("/reset-tickets", name="reset_tickets", methods={"GET","POST"})
+     */
+    public function resetTickets(Ticket $ticket, UserRepository $userRepository): Response
+    {
+        $tickets = $userRepository->findBy(
+            ['status' => "OPEN", "WAITING FOR CUSTOMER FEEDBACK", "IN PROGRESS"]);
+
+        $ticket->setStatus("OPEN");
+
+        $this->getDoctrine()->getManager()->flush();
+
+    }
+    
 }

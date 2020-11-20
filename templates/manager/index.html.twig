@@ -33,6 +33,24 @@
     {% endfor %}
     </tbody>
     </table>
+        {% for ticket in tickets %}
+            <tr>
+                <td>{{ ticket.id }}</td>
+                <td>{{ ticket.datetime ? ticket.datetime|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ ticket.status }}</td>
+                <td>{{ ticket.priority }}</td>
+                <td>
+                    <a href="{{ path('ticket_show', {'id': ticket.id}) }}">show</a>
+{#
+                    <a href="{{ path('ticket_edit', {'id': ticket.id}) }}">edit</a>
+#}
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">No records found</td>
+            </tr>
+        {% endfor %}
         <a class="btn btn-outline-info" href="{{ path('user_index') }}">Edit users</a>
     </div>
 {% endblock %}
