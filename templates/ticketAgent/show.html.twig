@@ -7,32 +7,39 @@
 
     <table class="table">
         <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ ticket.id }}</td>
-            </tr>
-            <tr>
-                <th>Datetime</th>
-                <td>{{ ticket.datetime ? ticket.datetime|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-            <tr>
-                <th>Status</th>
-                <td>{{ ticket.status }}</td>
-            </tr>
-            <tr>
-                <th>Priority</th>
-                <td>{{ ticket.priority }}</td>
-            </tr>
-            <tr>
-                <th>Order</th>
-                <td>{{ ticket.customerOrder }}</td>
-            </tr>
+        <tr>
+            <th>Id</th>
+            <td>{{ ticket.id }}</td>
+        </tr>
+        <tr>
+            <th>Datetime</th>
+            <td>{{ ticket.datetime ? ticket.datetime|date('Y-m-d H:i:s') : '' }}</td>
+        </tr>
+        <tr>
+            <th>Status</th>
+            <td>{{ ticket.status }}</td>
+        </tr>
+        <tr>
+            <th>Second Line</th>
+            <td>{{ ticket.secondLine ? 'Yes' : 'No' }}</td>
+        </tr>
+        <tr>
+            <th>Priority</th>
+            <td>{{ ticket.priority }}</td>
+        </tr>
+        <tr>
+            <th>Order</th>
+            <td>{{ ticket.customerOrder }}</td>
+        </tr>
         </tbody>
     </table>
+    {% if is_granted('ROLE_AGENT') %}
+        <a href="{{ path('agent') }}">back to list</a>
+    {% elseif is_granted('ROLE_SECOND_AGENT') %}
+        <a href="{{ path('second-agent') }}">back to list</a>
+    {% endif %}
 
-    <a href="{{ path('agent') }}">back to list</a>
+    {# <a href="{{ path('ticketAgent_edit', {'id': ticket.id}) }}">edit</a> #}
 
-{#    <a href="{{ path('ticketAgent_edit', {'id': ticket.id}) }}">edit</a>#}
-
-{#    {{ include('ticketAgent/_delete_form.html.twig') }}#}
+    {# {{ include('ticketAgent/_delete_form.html.twig') }} #}
 {% endblock %}

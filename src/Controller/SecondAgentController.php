@@ -17,29 +17,28 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/agent")
+ * @Route("/second-agent")
  */
-class AgentController extends AbstractController
+class SecondAgentController extends AbstractController
 {
     /**
-     * @Route("/", name="agent", methods={"GET"})
+     * @Route("/", name="second-agent", methods={"GET"})
      */
     public function index(): Response
     {
-        $this->denyAccessUnlessGranted('ROLE_AGENT');
+        $this->denyAccessUnlessGranted('ROLE_SECOND_AGENT');
         $userID = $this->getUser();
 
         $repository = $this->getDoctrine()->getRepository(Ticket::class);
-        $tickets = $repository->findBy(
-            ['status' => "OPEN", "handledBy" => null, "secondLine" => null]
-        );
-        $myTickets = $repository->findBy(
-            ["handledBy" => $userID]
-        );
-
-        $closedTickets = $repository->findBy(
-            ["status" => "CLOSED"]
-        );
+            $tickets = $repository->findBy(
+                ['status' => "OPEN", "handledBy" => null, "secondLine" => 1]
+            );
+            $myTickets = $repository->findBy(
+                ["handledBy" => $userID, "secondLine" => 1]
+            );
+            $closedTickets = $repository->findBy(
+                ["status" => "CLOSED", "secondLine" => 1]
+            );
 
         return $this->render('ticketAgent/index.html.twig', [
             'tickets' => $tickets,
@@ -79,7 +78,7 @@ class AgentController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/assign", name="ticketAgent_assign", methods={"GET","POST"})
+     * @Route("/{id}/assign", name="ticketSecondAgent_assign", methods={"GET","POST"})
      */
     public function assignAgent(Request $request, Ticket $ticket): Response
     {
@@ -89,12 +88,12 @@ class AgentController extends AbstractController
 
         $this->getDoctrine()->getManager()->flush();
 
-        return $this->redirectToRoute('agent');
+        return $this->redirectToRoute('second-agent');
 
     }
 
     /**
-     * @Route("/{id}/close", name="ticketAgent_close", methods={"GET","POST"})
+     * @Route("/{id}/close", name="ticketSecondAgent_close", methods={"GET","POST"})
      */
     public function toCloseTicket(Request $request, Ticket $ticket, TicketRepository $ticketRepository, CommentRepository $commentRepository): Response
     {
@@ -103,28 +102,28 @@ class AgentController extends AbstractController
         $commentOnTicket = $commentRepository->findBy(['ticketComment' => $ticketId]);
         if (isset($commentOnTicket[0])) {
             $whoLeftcomment = $commentOnTicket[0]->getCreatedBy()->getRoles();
-            if ($ticket->getStatus() == 'IN PROGRESS' && $whoLeftcomment[0] == 'ROLE_AGENT') {
+            if ($ticket->getStatus() == 'IN PROGRESS' && $whoLeftcomment[0] == 'ROLE_SECOND_AGENT') {
                 $ticket->setStatus('CLOSED');
                 $ticket->setDatetime(new DateTime());
                 $ticket->setHandledBy(null);
                 $this->getDoctrine()->getManager()->flush();
-                return $this->redirectToRoute('agent');
+                return $this->redirectToRoute('second-agent');
             }
         }
-        return $this->redirectToRoute('agent');
+        return $this->redirectToRoute('second-agent');
     }
 
-    /**
-     * @Route("/{id}/escalate", name="ticketAgent_escalate", methods={"GET","POST"})
-     */
-    public function escalateTicket(Request $request, Ticket $ticket): Response
-    {
-
-        $ticket->setSecondLine(true);
-        $this->getDoctrine()->getManager()->flush();
-        return $this->redirectToRoute('agent');
-
-    }
+//    /**
+//     * @Route("/{id}/escalate", name="ticketAgent_escalate", methods={"GET","POST"})
+//     */
+//    public function escalateTicket(Request $request, Ticket $ticket): Response
+//    {
+//
+//        $ticket->setSecondLine(true);
+//        $this->getDoctrine()->getManager()->flush();
+//        return $this->redirectToRoute('second-agent');
+//
+//    }
 // -------------------------------------COMMENTS---------------------------------
 
     /**

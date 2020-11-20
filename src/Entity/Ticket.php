@@ -54,6 +54,11 @@ class Ticket
      */
     private $customer_order;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $secondLine;
+
     public function __construct()
     {
         $this->comments = new ArrayCollection();
@@ -162,6 +167,18 @@ class Ticket
     public function setCustomerOrder(string $customer_order): self
     {
         $this->customer_order = $customer_order;
+
+        return $this;
+    }
+
+    public function getSecondLine(): ?bool
+    {
+        return $this->secondLine;
+    }
+
+    public function setSecondLine(bool $secondLine): self
+    {
+        $this->secondLine = $secondLine;
 
         return $this;
     }

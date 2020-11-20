@@ -128,6 +128,7 @@ class CustomerController2 extends AbstractController
             $ticket->setStatus('OPEN');
             $ticket->setDatetime(new DateTime());
             $ticket->setHandledBy(null);
+            $ticket->setSecondLine(0);
             $this->getDoctrine()->getManager()->flush();
                 return $this->redirectToRoute('ticket_index');
         }

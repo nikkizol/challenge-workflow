@@ -11,6 +11,7 @@
             <th>Id</th>
             <th>Datetime</th>
             <th>Status</th>
+            <th>Second Line</th>
             <th>Priority</th>
             <th>Order</th>
             <th>Action</th>
@@ -22,11 +23,20 @@
                 <td>{{ ticket.id }}</td>
                 <td>{{ ticket.datetime ? ticket.datetime|date('Y-m-d H:i:s') : '' }}</td>
                 <td>{{ ticket.status }}</td>
+                <td>{{ ticket.secondLine ? 'Yes' : 'No'  }}</td>
                 <td>{{ ticket.priority }}</td>
                 <td>{{ ticket.customerOrder }}</td>
                 <td>
                     <a href="{{ path('ticketAgent_show', {'id': ticket.id}) }}">Show</a>|
-                    <a href="{{ path('ticketAgent_assign', {'id': ticket.id}) }}">Assign self</a>
+                    {% if is_granted('ROLE_AGENT') %}
+                        <a href="{{ path('ticketAgent_assign', {'id': ticket.id}) }}">Assign self</a>
+                    {% elseif is_granted('ROLE_SECOND_AGENT') %}
+                        <a href="{{ path('ticketSecondAgent_assign', {'id': ticket.id}) }}">Assign self</a>
+                    {% endif %}
+                    {% if is_granted('ROLE_AGENT') %}
+                        |<a href="{{ path('ticketAgent_escalate', {'id': ticket.id}) }}">Escalate a ticket</a>
+                    {% endif %}
+{#                    <a href="{{ path('ticketAgent_escalate', {'id': ticket.id}) }}">Escalate a ticket</a>#}
 {#                    <a href="{{ path('comment_index', {'id': ticket.id}) }}">leave a comment</a>#}
                 </td>
             </tr>
@@ -64,7 +74,11 @@
                     <a href="{{ path('ticketAgent_show', {'id': ticket.id}) }}">Show</a>|
 {#                    <a href="{{ path('ticketAgent_edit', {'id': ticket.id}) }}">Edit</a>|#}
                     <a href="{{ path('commentAgent_index', {'id': ticket.id}) }}">Display Comments</a>|
-                    <a href="{{ path('ticketAgent_close', {'id': ticket.id})}}">Close ticket</a>
+                    {% if is_granted('ROLE_AGENT') %}
+                        <a href="{{ path('ticketAgent_close', {'id': ticket.id})}}">Close ticket</a>
+                    {% elseif is_granted('ROLE_SECOND_AGENT') %}
+                        <a href="{{ path('ticketSecondAgent_close', {'id': ticket.id})}}">Close ticket</a>
+                    {% endif %}
                 </td>
             </tr>
         {% else %}
