@@ -52,6 +52,7 @@ class CustomerController2 extends AbstractController
             $ticket->setDatetime(new DateTime());
             $ticket->setStatus('OPEN');
             $ticket->setPriority(0);
+            $ticket->setSecondLine(0);
 
             $entityManager->persist($ticket);
             $entityManager->flush();
