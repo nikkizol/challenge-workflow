@@ -31,11 +31,13 @@ class ManagerController extends AbstractController
     {
         $this->denyAccessUnlessGranted('ROLE_MANAGER');
         $agents = $userRepository->findByRole("ROLE_AGENT");
+        $agentsSec = $userRepository->findByRole("ROLE_SECOND_AGENT");
 
         $ticket = $ticketRepository->findBy(["status" => ['OPEN','WAITING FOR CUSTOMER FEEDBACK','IN PROGRESS']]);
 
         return $this->render('manager/index.html.twig', [
             'users' => $agents,
+            'agentsSec' => $agentsSec,
             "tickets" => $ticket
         ]);
     }
@@ -45,7 +47,7 @@ class ManagerController extends AbstractController
      */
     public function showAgent(UserRepository $userRepository): Response
     {
-        $agent = $userRepository->findByRole("ROLE_AGENT");
+        $agent = $userRepository->findByRole('ROLE_AGENT');
 
         $userID = $_GET["id"];
 
