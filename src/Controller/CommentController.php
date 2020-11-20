@@ -28,7 +28,6 @@ class CommentController extends AbstractController
     public function index(CommentRepository $commentRepository, Ticket $ticket): Response
     {
         $ticketId = $ticket->getId();
-        var_dump($ticketId);
         $comments = $commentRepository->findBy(
             ['ticketComment' => $ticketId, 'public' => 1]
         );

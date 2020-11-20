@@ -36,7 +36,11 @@
             {% endfor %}
             </tbody>
         </table>
-        <a class="btn btn-primary" href="{{ path('comment_new', {'id': ticketId}) }}">Create new</a>
+        {% if is_granted('ROLE_CUSTOMER') %}
         <a class="btn btn-primary" href="{{ path('ticket_index') }}">My Page</a>
+    {% elseif is_granted('ROLE_MANAGER') %}
+        <a class="btn btn-primary" href="{{ path('manager') }}">My Page</a>
+        {% endif %}
+        <a class="btn btn-primary" href="{{ path('comment_new', {'id': ticketId}) }}">Create new</a>
     </div>
 {% endblock %}

@@ -132,7 +132,6 @@ class SecondAgentController extends AbstractController
     public function indexAgent(CommentRepository $commentRepository, Ticket $ticket): Response
     {
         $ticketId = $ticket->getId();
-        var_dump($ticketId);
         $comments = $commentRepository->findBy(
             ['ticketComment' => $ticketId]
         );
