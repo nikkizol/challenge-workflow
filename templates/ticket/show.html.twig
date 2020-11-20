@@ -32,7 +32,11 @@
         </table>
 
         <div class="mb-2">
-            <a class="btn btn-outline-primary" href="{{ path('ticket_index') }}">back to list</a>
+            {% if is_granted('ROLE_CUSTOMER') %}
+                <a class="btn btn-outline-primary" href="{{ path('ticket_index') }}">back to list</a>
+            {% elseif is_granted('ROLE_MANAGER') %}
+                <a class="btn btn-outline-primary" href="{{ path('manager') }}">back to list</a>
+            {% endif %}
 
 {#            <a class="btn btn-outline-primary" href="{{ path('ticket_edit', {'id': ticket.id}) }}">edit</a>#}
         </div>

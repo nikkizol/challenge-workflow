@@ -13,6 +13,7 @@
             <th>Status</th>
             <th>Priority</th>
             <th>Order</th>
+            <th>Action</th>
         </tr>
         </thead>
         <tbody>
@@ -24,12 +25,9 @@
                 <td>{{ ticket.priority }}</td>
                 <td>{{ ticket.customerOrder }}</td>
                 <td>
-                    <a class="btn btn-outline-info" href="{{ path('ticketAgent_show', {'id': ticket.id}) }}">show</a>|
-                    <a class="btn btn-outline-primary" href="{{ path('edit_ticket', {'id': ticket.id}) }}">edit</a>|
+                    <a class="btn btn-outline-info" href="{{ path('ticketAgent_show', {'id': ticket.id}) }}">show</a>
+                    <a class="btn btn-outline-secondary" href="{{ path('edit_ticket', {'id': ticket.id}) }}">Won't fix</a>
                     <a class="btn btn-outline-secondary" href="{{ path('comment_index', {'id': ticket.id}) }}">leave a comment</a>
-                    <a href="{{ path('ticketAgent_show', {'id': ticket.id}) }}">show</a>|
-                    <a href="{{ path('edit_ticket', {'id': ticket.id}) }}">Won't fix</a>|
-                    <a href="{{ path('comment_index', {'id': ticket.id}) }}">leave a comment</a>
                 </td>
             </tr>
         {% else %}

@@ -4,8 +4,12 @@ namespace App\Controller;
 
 use App\Entity\Comment;
 use App\Entity\Ticket;
+use App\Form\CommentAgentType;
 use App\Form\ManagerTicketType;
+use App\Form\ManagerType;
+use App\Repository\TicketRepository;
 use App\Repository\UserRepository;
+use DateTime;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -23,16 +27,16 @@ class ManagerController extends AbstractController
      * @param Ticket $ticket
      * @return Response
      */
-    public function index(Ticket $ticket, UserRepository $userRepository): Response
+    public function index(TicketRepository $ticketRepository, UserRepository $userRepository): Response
     {
         $this->denyAccessUnlessGranted('ROLE_MANAGER');
         $agents = $userRepository->findByRole("ROLE_AGENT");
-        $ticket = $userRepository->findBy(
-            ['status' => "OPEN", "WAITING FOR CUSTOMER FEEDBACK", "IN PROGRESS"]);
+
+        $ticket = $ticketRepository->findBy(["status" => ['OPEN','WAITING FOR CUSTOMER FEEDBACK','IN PROGRESS']]);
 
         return $this->render('manager/index.html.twig', [
             'users' => $agents,
-            "ticket" => $ticket
+            "tickets" => $ticket
         ]);
     }
 
@@ -64,24 +68,57 @@ class ManagerController extends AbstractController
      */
     public function editTicket(Request $request, Ticket $ticket): Response
     {
-        $ticket->setStatus("won't fix");
-        
+        $ticket->setStatus("WON'T FIX");
         $this->getDoctrine()->getManager()->flush();
-
         return $this->redirectToRoute('manager');
     }
+
+
+
+    /**
+     * @Route("/edit-ticket/{id}", name="edit_ticket", methods={"GET","POST"})
+     */
+    public function new(Request $request, Ticket $ticket): Response
+    {
+        $ticketId = $ticket->getId();
+        $userID = $this->getUser();
+        $comment = new Comment();
+        $form = $this->createForm(ManagerType::class, $comment);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $ticket->setStatus("WON'T FIX");
+            $comment->setCreatedBy($userID);
+            $comment->setPublic(0);
+            $comment->setTicketComment($ticket);
+            $comment->setDatetime(new DateTime());
+            $entityManager->persist($comment);
+            $entityManager->flush();
+            return $this->redirectToRoute('manager');
+        }
+        return $this->render('commentAgent/new.html.twig', [
+            'form' => $form->createView(),
+            'ticketId' => $ticketId,
+        ]);
+    }
+
+
+
+
+
+
 
     /**
      * @Route("/reset-tickets", name="reset_tickets", methods={"GET","POST"})
      */
-    public function resetTickets(Ticket $ticket, UserRepository $userRepository): Response
+    public function resetTickets(TicketRepository $ticketRepository): Response
     {
-        $tickets = $userRepository->findBy(
-            ['status' => "OPEN", "WAITING FOR CUSTOMER FEEDBACK", "IN PROGRESS"]);
-
-        $ticket->setStatus("OPEN");
-
-        $this->getDoctrine()->getManager()->flush();
+        $tickets = $ticketRepository->findBy(["status" => ['OPEN','WAITING FOR CUSTOMER FEEDBACK','IN PROGRESS']]);
+        foreach ($tickets as $ticket){
+            $ticket->setStatus("OPEN");
+            $this->getDoctrine()->getManager()->flush();
+        }
+        return $this->redirectToRoute('manager');
 
     }
     

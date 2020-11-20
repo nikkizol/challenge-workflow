@@ -3,9 +3,9 @@
 {% block title %}Manager Dashboard{% endblock %}
 
 {% block body %}
-    <div class="container">
-        <h1>Active agents:</h1>
-        <table class="table table-striped table-hover">
+<div class="container">
+    <h1>Active agents:</h1>
+    <table class="table table-striped table-hover">
         <thead class="thead-dark">
         <tr>
             <th>Id</th>
@@ -18,19 +18,31 @@
         <tbody>
         {% for user in users %}
             <tr>
-                <td>{{ user.id }}</td>
-                <td>{{ user.email }}</td>
-                <td>{{ user.firstName }}</td>
-                <td>{{ user.lastName }}</td>
-                <td>
-                    <a class="btn btn-outline-info" href="{{ path('display_agent', {'id': user.id}) }}">Show</a>
-    {% else %}
-        <tr>
-            <td colspan="8">no records found</td>
-        </tr>
-    {% endfor %}
-    </tbody>
+            <td>{{ user.id }}</td>
+            <td>{{ user.email }}</td>
+            <td>{{ user.firstName }}</td>
+            <td>{{ user.lastName }}</td>
+            <td>
+            <a class="btn btn-outline-info" href="{{ path('display_agent', {'id': user.id}) }}">Show</a>
+        {% else %}
+            <tr>
+                <td colspan="8">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
     </table>
+    <div class="container">
+        <h1>All active tickets:</h1>
+        <table class="table table-striped table-hover">
+            <thead class="thead-dark">
+            <tr>
+                <th>Id</th>
+                <th>Date</th>
+                <th>Status</th>
+                <th>Priority</th>
+                <th>Action</th>
+            </tr>
+        <tbody>
         {% for ticket in tickets %}
             <tr>
                 <td>{{ ticket.id }}</td>
@@ -39,22 +51,17 @@
                 <td>{{ ticket.priority }}</td>
                 <td>
                     <a href="{{ path('ticket_show', {'id': ticket.id}) }}">show</a>
-{#
+                    {#
                     <a href="{{ path('ticket_edit', {'id': ticket.id}) }}">edit</a>
-#}
+                    #}
                 </td>
             </tr>
         {% else %}
-            <tr>
-                <td colspan="8">no records found</td>
-            </tr>
         {% endfor %}
         </tbody>
-        </table>
-            <a class="btn btn-outline-info" href="{{ path('user_index') }}">Edit users</a>
-                <td colspan="5">No records found</td>
-            </tr>
-        {% endfor %}
-        <a class="btn btn-outline-info" href="{{ path('user_index') }}">Edit users</a>
-    </div>
+    </table>
+    <a class="btn btn-outline-info" href="{{ path('user_index') }}">Edit users</a>
+    </tr>
+    <a class="btn btn-outline-info" href="{{ path('reset_tickets') }}">Reset All tickets</a>
+</div>
 {% endblock %}
