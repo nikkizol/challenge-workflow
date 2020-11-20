@@ -31,20 +31,20 @@ class AgentController extends AbstractController
 
         $repository = $this->getDoctrine()->getRepository(Ticket::class);
         $tickets = $repository->findBy(
-            ['status' => "OPEN", "handledBy" => null, "secondLine" => null]
+            ['status' => "OPEN", "handledBy" => null, "secondLine" => 0]
         );
         $myTickets = $repository->findBy(
             ["handledBy" => $userID]
         );
 
-        $closedTickets = $repository->findBy(
-            ["status" => "CLOSED"]
-        );
+//        $closedTickets = $repository->findBy(
+//            ["status" => "CLOSED"]
+//        );
 
         return $this->render('ticketAgent/index.html.twig', [
             'tickets' => $tickets,
             'myTickets' => $myTickets,
-            'closeTickets' => $closedTickets
+//            'closeTickets' => $closedTickets
         ]);
     }
 
@@ -106,7 +106,7 @@ class AgentController extends AbstractController
             if ($ticket->getStatus() == 'IN PROGRESS' && $whoLeftcomment[0] == 'ROLE_AGENT') {
                 $ticket->setStatus('CLOSED');
                 $ticket->setDatetime(new DateTime());
-                $ticket->setHandledBy(null);
+//                $ticket->setHandledBy(null);
                 $this->getDoctrine()->getManager()->flush();
                 return $this->redirectToRoute('agent');
             }

@@ -105,7 +105,7 @@ class SecondAgentController extends AbstractController
             if ($ticket->getStatus() == 'IN PROGRESS' && $whoLeftcomment[0] == 'ROLE_SECOND_AGENT') {
                 $ticket->setStatus('CLOSED');
                 $ticket->setDatetime(new DateTime());
-                $ticket->setHandledBy(null);
+//                $ticket->setHandledBy(null);
                 $this->getDoctrine()->getManager()->flush();
                 return $this->redirectToRoute('second-agent');
             }
