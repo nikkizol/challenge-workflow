@@ -5,8 +5,8 @@
 {% block body %}
 <div class="container">
 <h1>Agent tickets</h1>
-    <table class="table">
-        <thead>
+    <table class="table table-striped table-hover">
+        <thead class="thead-dark">
         <tr>
             <th>Id</th>
             <th>Datetime</th>
@@ -24,9 +24,9 @@
                 <td>{{ ticket.priority }}</td>
                 <td>{{ ticket.customerOrder }}</td>
                 <td>
-                    <a href="{{ path('ticketAgent_show', {'id': ticket.id}) }}">show</a>|
-                    <a href="{{ path('edit_ticket', {'id': ticket.id}) }}">edit</a>|
-                    <a href="{{ path('comment_index', {'id': ticket.id}) }}">leave a comment</a>
+                    <a class="btn btn-outline-info" href="{{ path('ticketAgent_show', {'id': ticket.id}) }}">show</a>|
+                    <a class="btn btn-outline-primary" href="{{ path('edit_ticket', {'id': ticket.id}) }}">edit</a>|
+                    <a class="btn btn-outline-secondary" href="{{ path('comment_index', {'id': ticket.id}) }}">leave a comment</a>
                 </td>
             </tr>
         {% else %}

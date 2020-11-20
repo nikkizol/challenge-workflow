@@ -12,8 +12,8 @@
                 <td>{{ ticket.status }}</td>
                 <td>{{ ticket.priority }}</td>
                 <td>
-                    <a href="{{ path('ticket_show', {'id': ticket.id}) }}">show</a>
-                    <a href="{{ path('ticket_edit', {'id': ticket.id}) }}">edit</a>
+                    <a class="btn btn-outline-info" href="{{ path('ticket_show', {'id': ticket.id}) }}">show</a>
+                    <a class="btn btn-outline-primary" href="{{ path('ticket_edit', {'id': ticket.id}) }}">edit</a>
                 </td>
             </tr>
         {% else %}
